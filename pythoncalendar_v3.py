@@ -25,17 +25,20 @@ from pickle import dump, load
 from sys import argv
 from threading import Thread
 from time import sleep
+from typing import Union
 
 from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
+from googleapiclient.discovery import Resource, build
 from pygsheets import authorize
+from pygsheets.spreadsheet import Spreadsheet
+from pygsheets.worksheet import Worksheet
 from requests import Timeout, get
 from termcolor import colored
 
 ARG = argv[1] if len(argv) > 1 else None
 
 
-def hasnumbers(inputstring) -> bool:
+def hasnumbers(inputstring: str) -> bool:
     """Check if string has numbers"""
     return any(char.isdigit() for char in inputstring)
 
@@ -78,7 +81,7 @@ def calhelp(
     # use only the event sheet within the workbook
     for sheet in sheets:
         if sheet.title == 'Tech Schedule':
-            events_sheet = sheet
+            events_sheet: Worksheet = sheet
 
     if param == "v":
         print(colored("==>", "green", attrs=['bold']), colored(
@@ -168,7 +171,7 @@ def calhelp(
                       name, service, calendar_id, calevent)
 
 
-def get_event_time(time_string):
+def get_event_time(time_string: str) -> Union[int, int]:
     """Get event time info"""
     if hasnumbers(time_string):
         hour = int(time_string.split(':')[0])
@@ -183,7 +186,7 @@ def get_event_time(time_string):
 
 def add_cal_event(
     end_string, now, end_time, param, name, service, calendar_id, calevent
-):
+) -> None:
     """Add event to calendar"""
     if hasnumbers(end_string) and now < end_time:
         if param == "v":
@@ -195,13 +198,13 @@ def add_cal_event(
             add_event(service, calendar_id, calevent)
 
 
-def add_event(service, calendar_id, calevent):
+def add_event(service, calendar_id, calevent) -> None:
     """Add event to service"""
     service.events().insert(calendarId=calendar_id,
                             body=calevent).execute()
 
 
-def get_event_rows(events_sheet, initials):
+def get_event_rows(events_sheet, initials) -> list:
     """Get events that {initals} are working"""
     my_events = events_sheet.find(initials)
     my_events_rows = [event.row - 1 for event in my_events]
@@ -212,7 +215,7 @@ def get_event_rows(events_sheet, initials):
     return sorted(my_events_rows)
 
 
-def del_events(now, service, calendar_id):
+def del_events(now, service, calendar_id) -> None:
     """Delete future events"""
     time_min = now.isoformat('T') + "-05:00"
     events = service.events()
@@ -246,7 +249,7 @@ def del_events(now, service, calendar_id):
             break
 
 
-def gc_creds(directory, cal_secret_name):
+def gc_creds(directory, cal_secret_name) -> Resource:
     """Authorize access to google calendar"""
     pklstr = directory + '/token.pkl'
     scopes = ['https://www.googleapis.com/auth/calendar']
@@ -263,7 +266,7 @@ def gc_creds(directory, cal_secret_name):
     return build("calendar", "v3", credentials=credentials)
 
 
-def sh_creds(directory, sheet_secret_name):
+def sh_creds(directory, sheet_secret_name) -> Spreadsheet:
     """Get google sheet"""
     gcal = authorize(
         client_secret=directory + "/" + sheet_secret_name,
