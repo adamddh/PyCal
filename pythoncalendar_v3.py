@@ -64,7 +64,7 @@ def calhelp(
     sheets = sh_creds(directory, sheet_secret_name)
 
     # makes available the google calendar
-    service = gc_creds(directory, cal_secret_name)
+    service: Resource = gc_creds(directory, cal_secret_name)
 
     t_del = Thread(target=del_events, args=(now, service, calendar_id))
 
@@ -185,7 +185,7 @@ def get_event_time(time_string: str) -> Union[int, int]:
 
 
 def add_cal_event(
-    end_string, now, end_time, param, name, service, calendar_id, calevent
+    end_string, now, end_time, param, name, service: Resource, calendar_id, calevent
 ) -> None:
     """Add event to calendar"""
     if hasnumbers(end_string) and now < end_time:
@@ -198,7 +198,7 @@ def add_cal_event(
             add_event(service, calendar_id, calevent)
 
 
-def add_event(service, calendar_id, calevent) -> None:
+def add_event(service: Resource, calendar_id, calevent) -> None:
     """Add event to service"""
     service.events().insert(calendarId=calendar_id,
                             body=calevent).execute()
@@ -215,7 +215,7 @@ def get_event_rows(events_sheet, initials) -> list:
     return sorted(my_events_rows)
 
 
-def del_events(now, service, calendar_id) -> None:
+def del_events(now, service: Resource, calendar_id) -> None:
     """Delete future events"""
     time_min = now.isoformat('T') + "-05:00"
     events = service.events()
