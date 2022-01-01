@@ -175,7 +175,7 @@ def get_event_time(time_string: str) -> Union[int, int]:
     """Get event time info"""
     if hasnumbers(time_string):
         hour = int(time_string.split(':')[0])
-        minute = int(time_string.split(':')[1][0:2])
+        minute = int(time_string.split(':')[1][:2])
         if time_string.split(':')[1][-2:] == "PM" and hour != 12:
             hour += 12
     else:
