@@ -29,6 +29,7 @@ from typing import Union
 
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import Resource, build
+from googleapiclient.errors import HttpError
 from pygsheets import authorize
 from pygsheets.spreadsheet import Spreadsheet
 from pygsheets.worksheet import Worksheet
@@ -80,6 +81,7 @@ def calhelp(
 
     # use only the event sheet within the workbook
     for sheet in sheets:
+        sheet: Worksheet
         if sheet.title == 'Tech Schedule':
             events_sheet: Worksheet = sheet
 
@@ -193,7 +195,7 @@ def add_cal_event(
             print('  ', name)
         try:
             add_event(service, calendar_id, calevent)
-        except Exception:
+        except HttpError:
             sleep(1)
             add_event(service, calendar_id, calevent)
 
@@ -226,22 +228,18 @@ def del_events(now, service: Resource, calendar_id) -> None:
                              timeMin=time_min, singleEvents=True,
                              orderBy="startTime").execute()
         for i in range(len(result['items'])):
-            try:
-                if result['items'][i]['description']\
-                        .startswith('Automatic creation') and \
-                        datetime.strptime(
-                            result["items"][i]["start"]["dateTime"][:-6],
-                            "%Y-%m-%dT%H:%M:%S"
-                ) > now:
-                    delete_events_id.append(result['items'][i]['id'])
-            except KeyError:  # not all event have a feild 'description', and raises
-                pass  # an error if there is no feild. Addressed by skipping
-                # event as its not ours
+            if "description" in result["items"][i] and \
+                result["items"][i]["description"]\
+                    .startswith('Automatic creation') and \
+                datetime.strptime(result["items"][i]["start"]["dateTime"][:-6],
+                                  "%Y-%m-%dT%H:%M:%S") > now:
+                delete_events_id.append(result['items'][i]['id'])
+
         for i in delete_events_id:
             try:
                 events.delete(calendarId=calendar_id,
                               eventId=i).execute()
-            except Exception:
+            except HttpError:
                 sleep(1)
                 events.delete(calendarId=calendar_id,
                               eventId=i).execute()
