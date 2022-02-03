@@ -326,10 +326,24 @@ def run_bri():
     )
 
 
+def run_brooks():
+    """run brooks"""
+    calhelp(
+        initials="BT",
+        calendar_id="Xobr21037@gmail.com",
+        directory="/Users/adamdenhaan/Documents/PyCal/credentials/brookscreds",
+        sheet_secret_name="SCS.json",
+        cal_secret_name="PCS.json",
+        color_id=1,
+        param=None
+    )
+
+
 def main():
     """Main()"""
     Thread(target=run_adam).start()
     Thread(target=run_bri).start()
+    Thread(target=run_brooks).start()
 
 
 if __name__ == '__main__' and check_connection(ARG):
