@@ -223,17 +223,22 @@ def del_events(now, service: Resource, calendar_id) -> None:
     events = service.events()
 
     while True:
-        delete_events_id = []
         result = events.list(calendarId=calendar_id,
                              timeMin=time_min, singleEvents=True,
                              orderBy="startTime").execute()
-        for i in range(len(result['items'])):
-            if "description" in result["items"][i] and \
-                result["items"][i]["description"]\
-                    .startswith('Automatic creation') and \
-                datetime.strptime(result["items"][i]["start"]["dateTime"][:-6],
-                                  "%Y-%m-%dT%H:%M:%S") > now:
-                delete_events_id.append(result['items'][i]['id'])
+        delete_events_id = [
+            result['items'][i]['id']
+            for i in range(len(result['items']))
+            if "description" in result["items"][i]
+            and result["items"][i]["description"].startswith(
+                'Automatic creation'
+            )
+            and datetime.strptime(
+                result["items"][i]["start"]["dateTime"][:-6],
+                "%Y-%m-%dT%H:%M:%S",
+            )
+            > now
+        ]
 
         for i in delete_events_id:
             try:
