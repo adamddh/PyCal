@@ -34,6 +34,7 @@ from pygsheets import authorize
 from pygsheets.spreadsheet import Spreadsheet
 from pygsheets.worksheet import Worksheet
 from requests import Timeout, get
+from requests.exceptions import ConnectionError as ConnError
 from termcolor import colored
 
 ARG = argv[1] if len(argv) > 1 else None
@@ -295,7 +296,7 @@ def check_connection(param: str) -> bool:
         if param == "v":
             print('\t', "Connection established")
         return True
-    except (ConnectionError, Timeout):
+    except (ConnError, Timeout):
         if param == "v":
             print('\t', "Connection failed, exiting.")
         return False
