@@ -38,6 +38,7 @@ from requests.exceptions import ConnectionError as ConnError
 from termcolor import colored
 
 ARG = argv[1] if len(argv) > 1 else None
+BASEPATH = "/Users/adamdenhaan/Documents/PyCal"
 
 
 def hasnumbers(inputstring: str) -> bool:
@@ -307,7 +308,7 @@ def run_adam():
     calhelp(
         initials="ADH",
         calendar_id="adamdh00@gmail.com",
-        directory="/Users/adamdenhaan/Documents/PyCal/credentials",
+        directory=f"{BASEPATH}/credentials",
         sheet_secret_name="SCS.json",
         cal_secret_name="PCS.json",
         color_id=11,
@@ -319,7 +320,7 @@ def run_bri():
     calhelp(
         initials="BJ",
         calendar_id="brijans19@gmail.com",
-        directory="/Users/adamdenhaan/Documents/PyCal/credentials/bricreds",
+        directory=f"{BASEPATH}/credentials/bricreds",
         sheet_secret_name="SCS.json",
         cal_secret_name="PCS.json",
         color_id=7,
@@ -332,7 +333,7 @@ def run_brooks():
     calhelp(
         initials="BT",
         calendar_id="Xobr21037@gmail.com",
-        directory="/Users/adamdenhaan/Documents/PyCal/credentials/brookscreds",
+        directory=f"{BASEPATH}/credentials/brookscreds",
         sheet_secret_name="SCS.json",
         cal_secret_name="PCS.json",
         color_id=1,
