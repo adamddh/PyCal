@@ -214,9 +214,8 @@ def get_event_rows(events_sheet, initials) -> list:
     my_events_rows = [event.row - 1 for event in my_events]
     everyone_events = events_sheet.find(
         'ALL', cols=(1, 7), matchEntireCell=True)
-    for event in everyone_events:
-        my_events_rows.append(event.row - 1)
-    return sorted(my_events_rows)
+    my_events_rows.extend(event.row - 1 for event in everyone_events)
+    return sorted(list(set(my_events_rows)))
 
 
 def del_events(now, service: Resource, calendar_id) -> None:
@@ -256,15 +255,16 @@ def del_events(now, service: Resource, calendar_id) -> None:
 
 def gc_creds(directory, cal_secret_name) -> Resource:
     """Authorize access to google calendar"""
-    pklstr = directory + '/token.pkl'
+    pklstr = f'{directory}/token.pkl'
     scopes = ['https://www.googleapis.com/auth/calendar']
     if exists(pklstr):
         with open(pklstr, "rb") as token:
             credentials = load(token)
     else:
         flow = InstalledAppFlow.from_client_secrets_file(
-            directory + "/" + cal_secret_name,
-            scopes=scopes)
+            f'{directory}/{cal_secret_name}', scopes=scopes
+        )
+
         credentials = flow.run_local_server(port=0)
         with open(pklstr, "wb") as token:
             dump(credentials, token)
@@ -274,9 +274,11 @@ def gc_creds(directory, cal_secret_name) -> Resource:
 def sh_creds(directory, sheet_secret_name) -> Spreadsheet:
     """Get google sheet"""
     gcal = authorize(
-        client_secret=directory + "/" + sheet_secret_name,
+        client_secret=f'{directory}/{sheet_secret_name}',
         credentials_directory=directory,
-        local=True)
+        local=True
+    )
+
     return gcal.open_by_key("1cEZ6P6EXSaBuu00gEbg2mmqbAci1CECGKorfmdMGtfQ")
 
 
