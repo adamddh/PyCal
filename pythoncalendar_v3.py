@@ -111,6 +111,9 @@ def calhelp(
 
     for i in my_events_rows:
 
+        if dates[i] == "":
+            continue
+
         date_obj = datetime.strptime(dates[i], "%A-%b-%d-%y")
         # year/month/date ints
         month = date_obj.month
@@ -210,6 +213,8 @@ def add_event(service: Resource, calendar_id, calevent) -> None:
 
 def get_event_rows(events_sheet, initials) -> list:
     """Get events that {initals} are working"""
+    if initials == "ANY":
+        return list(range(1, events_sheet.rows))
     my_events = events_sheet.find(initials)
     my_events_rows = [event.row - 1 for event in my_events]
     everyone_events = events_sheet.find(
@@ -341,6 +346,18 @@ def run_brooks():
         color_id=1,
         param=None
     )
+
+
+def run_calvin():
+    """run calvin"""
+    calhelp(
+        initials="ANY",
+        calendar_id="rdfvrbd06kr0fsa49g4h771l8c@group.calendar.google.com",
+        directory=f"{BASEPATH}/credentials",
+        sheet_secret_name="SCS.json",
+        cal_secret_name="PCS.json",
+        color_id=3,
+        param=ARG)
 
 
 def main():
