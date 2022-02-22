@@ -99,8 +99,10 @@ def calhelp(
     starts = events_sheet.get_col(4)
     ends = events_sheet.get_col(5)
     locations = events_sheet.get_col(6)
-    workers = events_sheet.get_col(7)
+    sound = events_sheet.get_col(7)
     records = events_sheet.get_col(8)
+    lights = events_sheet.get_col(9)
+    stage = events_sheet.get_col(10)
     event_coords = events_sheet.get_col(11)
 
     t_del.join()
@@ -145,7 +147,9 @@ def calhelp(
         descripion = ('Automatic creation\nEvent Start Time: ' + start +
                       '\nEvent Coordinator: ' + event_coord +
                       '\nRecord: ' + record +
-                      '\nWorkers: ' + workers[i] +
+                      '\nSound: ' + sound[i] +
+                      '\nLights: ' + lights[i] +
+                      '\nStage: ' + stage[i] +
                       '\nRuntime: ' + str(datetime.now()))
 
         # create the calendar event
