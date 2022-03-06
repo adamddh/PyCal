@@ -291,7 +291,7 @@ def sh_creds(directory, sheet_secret_name) -> Spreadsheet:
     return gcal.open_by_key("1cEZ6P6EXSaBuu00gEbg2mmqbAci1CECGKorfmdMGtfQ")
 
 
-def check_connection(param: str) -> bool:
+def check_connection(param: str = None) -> bool:
     """
     Check if computer has internet connection
 
