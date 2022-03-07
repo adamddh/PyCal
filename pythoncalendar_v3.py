@@ -116,7 +116,10 @@ def calhelp(
         if dates[i] == "":
             continue
 
-        date_obj = datetime.strptime(dates[i], "%A-%b-%d-%y")
+        try:
+            date_obj = datetime.strptime(dates[i], "%A-%b-%d-%y")
+        except ValueError:
+            continue
         # year/month/date ints
         month = date_obj.month
         year = date_obj.year
