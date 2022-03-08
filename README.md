@@ -19,7 +19,3 @@ This was built to do the same job as v3, but instead of working with a google sh
 ### - pythoncalendar_v3.py
 
 The workhorse. Contains functionality for getting events and putting them in the calendar, as well as running this directly from the command line.
-
-### - redline.py
-
-Detects changes in the redline, so one can schedule themselves for more events. **This is slightly devious but it's public code.**
