@@ -69,7 +69,7 @@ def calhelp(
     # makes available the google calendar
     service: Resource = gc_creds(directory, cal_secret_name)
 
-    t_del = Thread(target=del_events, args=(now, service, calendar_id))
+    t_del = Thread(target=del_events, args=(now, service, calendar_id, param))
 
     if param == "v":
         print(colored("==>", "green", attrs=['bold']), colored(
@@ -230,7 +230,7 @@ def get_event_rows(events_sheet, initials) -> list:
     return sorted(list(set(my_events_rows)))
 
 
-def del_events(now, service: Resource, calendar_id) -> None:
+def del_events(now, service: Resource, calendar_id, param) -> None:
     """Delete future events"""
     time_min = now.isoformat('T') + "-05:00"
     events = service.events()
@@ -263,6 +263,9 @@ def del_events(now, service: Resource, calendar_id) -> None:
                               eventId=i).execute()
         if not delete_events_id:
             break
+
+        if param == "v":
+            print('\t', "Events Deleted")
 
 
 def gc_creds(directory, cal_secret_name) -> Resource:
