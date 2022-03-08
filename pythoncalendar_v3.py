@@ -82,10 +82,7 @@ def calhelp(
             "Fetching events...", "white", attrs=['bold']))
 
     # use only the event sheet within the workbook
-    for sheet in sheets:
-        sheet: Worksheet
-        if sheet.title == 'Tech Schedule':
-            events_sheet: Worksheet = sheet
+    events_sheet: Worksheet = sheets[0]
 
     if param == "v":
         print(colored("==>", "green", attrs=['bold']), colored(
@@ -99,11 +96,15 @@ def calhelp(
     starts = events_sheet.get_col(4)
     ends = events_sheet.get_col(5)
     locations = events_sheet.get_col(6)
-    sound = events_sheet.get_col(7)
-    records = events_sheet.get_col(8)
+    department = events_sheet.get_col(7)
+    sound = events_sheet.get_col(8)
     lights = events_sheet.get_col(9)
+    records = events_sheet.get_col(9)
     stage = events_sheet.get_col(10)
-    event_coords = events_sheet.get_col(11)
+    b_cast = events_sheet.get_col(11)
+    video = events_sheet.get_col(12)
+    temp = events_sheet.get_col(13)
+    event_coords = events_sheet.get_col(14)
 
     t_del.join()
 
@@ -146,13 +147,17 @@ def calhelp(
         # Event coordinator string
         event_coord = event_coords[i]
 
-        # Description string
-        descripion = ('Automatic creation\nEvent Start Time: ' + start +
+        descripion = ('Automatic creation' +
+                      '\nEvent Start Time: ' + start +
                       '\nEvent Coordinator: ' + event_coord +
+                      '\nDepartment: ' + department[i] +
                       '\nRecord: ' + record +
                       '\nSound: ' + sound[i] +
+                      '\nBroadcast: ' + b_cast[i] +
+                      '\nTemp: ' + temp[i] +
                       '\nLights: ' + lights[i] +
                       '\nStage: ' + stage[i] +
+                      '\nVideo: ' + video[i] +
                       '\nRuntime: ' + str(datetime.now()))
 
         # create the calendar event
@@ -225,7 +230,7 @@ def get_event_rows(events_sheet, initials) -> list:
     my_events = events_sheet.find(initials)
     my_events_rows = [event.row - 1 for event in my_events]
     everyone_events = events_sheet.find(
-        'ALL', cols=(1, 7), matchEntireCell=True)
+        'ALL', cols=(1, 8, 9), matchEntireCell=True)
     my_events_rows.extend(event.row - 1 for event in everyone_events)
     return sorted(list(set(my_events_rows)))
 
@@ -294,7 +299,7 @@ def sh_creds(directory, sheet_secret_name) -> Spreadsheet:
         local=True
     )
 
-    return gcal.open_by_key("1cEZ6P6EXSaBuu00gEbg2mmqbAci1CECGKorfmdMGtfQ")
+    return gcal.open_by_key("1f3G7XkZtH4vJJ0qoPjjsOnRHcnWurceP83_cKqI_8jE")
 
 
 def check_connection(param: str = None) -> bool:
