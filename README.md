@@ -22,4 +22,4 @@ The workhorse. Contains functionality for getting events and putting them in the
 
 ### - redline.py
 
-Detects changes in the redline, so one can schedule themselves for more events. \*_This is slightly devious but it's public code._
+Detects changes in the redline, so one can schedule themselves for more events. **This is slightly devious but it's public code.**
