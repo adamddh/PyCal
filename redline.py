@@ -9,10 +9,9 @@ from ssl import create_default_context
 
 from pygsheets import authorize
 from pygsheets.spreadsheet import Spreadsheet
-from requests import Timeout, get
-from requests.exceptions import ConnectionError as ConnError
 
 from credentials.creds import PASSWORD
+from pythoncalendar_v3 import check_connection
 
 DIRECTORY = "/Users/adamdenhaan/Documents/PyCal/credentials/"
 SHEET_SECRET_NAME = "SCS.json"
@@ -87,22 +86,6 @@ Detected at {now}. Moved from {old_date} to {new_date}."""
     with SMTP_SSL(smtp_server, port, context=context) as server:
         server.login(sender_email, PASSWORD)
         server.sendmail(sender_email, receiver_email, message)
-
-
-def check_connection() -> bool:
-    """
-    Check if computer has internet connection
-
-    Returns:
-        bool: True if internet connection.
-    """
-    url = "https://www.google.com/"
-    timeout = 15
-    try:
-        get(url, timeout=timeout)
-        return True
-    except (ConnError, Timeout):
-        return False
 
 
 if __name__ == "__main__" and check_connection():

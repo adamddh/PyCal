@@ -15,11 +15,10 @@ pandas == 1.4.1
 protobuf == 3.19.4
 
 # PyCal/pythoncalendar_v3.py: 33,34,35
-# PyCal/redline.py: 10,11,12
+# PyCal/redline.py: 10,11
 pygsheets == 2.0.5
 
 # PyCal/pythoncalendar_v3.py: 36,37
-# PyCal/redline.py: 13,14
 requests == 2.27.1
 
 # PyCal/pycalv4.py: 32
