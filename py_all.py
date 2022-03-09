@@ -1,6 +1,6 @@
 """script to just run all events, to be used infrequently"""
 
-from pythoncalendar_v3 import run_calvin, check_connection, ARG
+from pythoncalendar_v3 import ARG, check_connection, run_calvin
 
 
 def main():
