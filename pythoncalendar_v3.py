@@ -262,10 +262,13 @@ def del_events(now, service: Resource, calendar_id, param) -> None:
             try:
                 events.delete(calendarId=calendar_id,
                               eventId=i).execute()
-            except (HttpError, Exception):  # pylint: disable=broad-except
-                sleep(1)
-                events.delete(calendarId=calendar_id,
-                              eventId=i).execute()
+            except (HttpError, TimeoutError):
+                try:
+                    sleep(1)
+                    events.delete(calendarId=calendar_id,
+                                  eventId=i).execute()
+                except (HttpError, TimeoutError):
+                    pass
         if not delete_events_id:
             break
 
