@@ -83,6 +83,8 @@ def calhelp(
 
     # use only the event sheet within the workbook
     events_sheet: Worksheet = sheets[0]
+    es_conact_sheet: Worksheet = sheets[1]
+    cpt_contact_sheet: Worksheet = sheets[2]
 
     if param == "v":
         print(colored("==>", "green", attrs=['bold']), colored(
@@ -105,6 +107,12 @@ def calhelp(
     video = events_sheet.get_col(12)
     temp = events_sheet.get_col(13)
     event_coords = events_sheet.get_col(14)
+
+    event_coord_names = es_conact_sheet.get_col(1)
+    event_coord_nums = es_conact_sheet.get_col(4)
+
+    cpt_names = cpt_contact_sheet.get_col(1)
+    cpt_nums = cpt_contact_sheet.get_col(3)
 
     t_del.join()
 
@@ -146,10 +154,16 @@ def calhelp(
 
         # Event coordinator string
         event_coord = event_coords[i]
+        try:
+            event_coord_num = event_coord_nums[event_coord_names.index(
+                event_coords[i])]
+        except ValueError:
+            event_coord_num = ""
 
         descripion = ('Automatic creation' +
                       '\nEvent Start Time: ' + start +
-                      '\nEvent Coordinator: ' + event_coord +
+                      '\nEvent Coordinator: ' + event_coord + " " +
+                      event_coord_num +
                       '\nDepartment: ' + department[i] +
                       '\nRecord: ' + record +
                       '\nSound: ' + sound[i] +
