@@ -19,7 +19,7 @@ calendar_colors = {
 '''
 
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from os.path import exists
 from pickle import dump, load
 from sys import argv
@@ -177,6 +177,9 @@ def calhelp(
         # create the calendar event
         start_time = datetime(year, month, date, start_hour, start_minute, 0)
         end_time = datetime(year, month, date, end_hour, end_minute, 0)
+
+        if end_time.hour < 12 and start_time.hour >= 12:
+            end_time = end_time + timedelta(hours=12)
 
         if start_time > end_time:
             start_hour, start_minute = get_event_time(starts[i])
