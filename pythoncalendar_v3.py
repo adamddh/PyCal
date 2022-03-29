@@ -19,6 +19,7 @@ calendar_colors = {
 '''
 
 
+from contextlib import suppress
 from datetime import datetime, timedelta
 from os.path import exists
 from pickle import dump, load
@@ -183,8 +184,13 @@ def calhelp(
 
         if start_time > end_time:
             start_hour, start_minute = get_event_time(starts[i])
+            start_time = datetime(
+                year, month, date, start_hour, start_minute, 0)
 
-        start_time = datetime(year, month, date, start_hour, start_minute, 0)
+        if start_time > end_time:
+            end_time = datetime(year, month, date, 23, 59, 0)
+
+        # start_time = datetime(year, month, date, start_hour, start_minute, 0)
         calevent = {
             'summary': name,
             'location': location,
@@ -236,8 +242,13 @@ def add_cal_event(
 
 def add_event(service: Resource, calendar_id, calevent) -> None:
     """Add event to service"""
-    service.events().insert(calendarId=calendar_id,
-                            body=calevent).execute()
+    try:
+        service.events().insert(calendarId=calendar_id,
+                                body=calevent).execute()
+    except TimeoutError:
+        sleep(1)
+        service.events().insert(calendarId=calendar_id,
+                                body=calevent).execute()
 
 
 def get_event_rows(events_sheet, initials) -> list:
@@ -280,12 +291,10 @@ def del_events(now, service: Resource, calendar_id, param) -> None:
                 events.delete(calendarId=calendar_id,
                               eventId=i).execute()
             except (HttpError, TimeoutError):
-                try:
+                with suppress(HttpError, TimeoutError):
                     sleep(1)
                     events.delete(calendarId=calendar_id,
                                   eventId=i).execute()
-                except (HttpError, TimeoutError):
-                    pass
         if not delete_events_id:
             break
 
