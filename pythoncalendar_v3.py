@@ -78,10 +78,6 @@ def calhelp(
 
     t_del.start()
 
-    if param == "v":
-        print(colored("==>", "green", attrs=['bold']), colored(
-            "Fetching events...", "white", attrs=['bold']))
-
     # use only the event sheet within the workbook
     events_sheet: Worksheet = sheets[0]
     es_conact_sheet: Worksheet = sheets[1]
@@ -92,6 +88,10 @@ def calhelp(
             "Finding my events...", "white", attrs=['bold']))
 
     my_events_rows = get_event_rows(events_sheet, initials)
+
+    if param == "v":
+        print(colored("==>", "green", attrs=['bold']), colored(
+            "Fetching events...", "white", attrs=['bold']))
 
     dates = events_sheet.get_col(1)
     titles = events_sheet.get_col(2)
@@ -111,9 +111,6 @@ def calhelp(
 
     event_coord_names = es_conact_sheet.get_col(1)
     event_coord_nums = es_conact_sheet.get_col(4)
-
-    cpt_names = cpt_contact_sheet.get_col(1)
-    cpt_nums = cpt_contact_sheet.get_col(3)
 
     t_del.join()
 
