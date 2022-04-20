@@ -81,7 +81,6 @@ def calhelp(
     # use only the event sheet within the workbook
     events_sheet: Worksheet = sheets[0]
     es_conact_sheet: Worksheet = sheets[1]
-    cpt_contact_sheet: Worksheet = sheets[2]
 
     if param == "v":
         print(colored("==>", "green", attrs=['bold']), colored(
