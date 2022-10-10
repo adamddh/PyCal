@@ -12,7 +12,7 @@ google_auth_oauthlib == 0.4.6
 pandas == 1.4.1
 
 # PyCal/pycalv4.py: 27
-protobuf == 3.19.4
+protobuf == 3.19.5
 
 # PyCal/pythoncalendar_v3.py: 33,34,35
 # PyCal/redline.py: 10,11
