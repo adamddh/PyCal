@@ -19,7 +19,7 @@ protobuf == 3.19.5
 pygsheets == 2.0.5
 
 # PyCal/pythoncalendar_v3.py: 36,37
-requests == 2.31.0
+requests == 2.32.0
 
 # PyCal/pycalv4.py: 32
 # PyCal/pythoncalendar_v3.py: 38
